@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abyssal Rhythm ∞ iNFiNiTY</title>
+    <link href="index.css" rel="stylesheet" type="text/css"></link>
+</head>
+
+<body>
+    <img class="bg" src="./image/bg.png">
+    <div class="bg-mask"></div>
+
+    <div class="canvas-wrapper" id="canvas-wrapper">
+        <canvas id="rhythm-wave"></canvas>
+    </div>
+
+    <div class="panel-all">
+        <div class="illu"></div>
+
+        <div class="info-panel">
+            <div class="info-panel-all">
+                <div class="club-name">-溟律社-</div>
+                <div class="song-name">
+                    <span class="fade-effect" style="animation-delay: 0s;">Abyssal </span>
+                    <span class="fade-effect" style="animation-delay: 0.3s;">Rhythm </span>
+                    <span class="fade-effect" style="animation-delay: 0.6s;">∞ </span>
+                    <span class="fade-effect" style="animation-delay: 0.9s;">iNFiNiTY</span>
+                </div>
+
+                <div class="artist-name">
+                    <a class="fade-effect artist-name-link" 
+                    style="animation-delay: 1.2s;" 
+                    href="https://space.bilibili.com/2137653743?spm_id_from=333.337.search-card.all.click" 
+                    target="_blank" 
+                    rel="noopener noreferrer">——by: ADHD_BC ——</a>
+                </div>
+    
+                <div class="play-button-wrapper">
+                    <button onclick="startMusic()" class="play-button" style="animation-delay: 1.6s;" id="play-button">Play</button>
+                    <audio id="bgm" src="./audio/bgm.mp3" loop></audio>
+                </div>
+            </div>
+        </div>   
+    </div>
+
+    <!--Play Music-->
+    <script>
+        let music_playing = false;
+        function startMusic() {
+            music_playing = !music_playing;
+            if (music_playing) {
+                document.getElementById('bgm').play();
+                document.getElementById('play-button').innerText = 'Pause';
+            } else {
+                document.getElementById('bgm').pause();
+                document.getElementById('play-button').innerText = 'Play';
+            }
+        }
+    </script>
+
+    <!--Special Effect-->
+    <script>
+        let canvas = document.getElementById("rhythm-wave");
+        const canvas_wrapper = document.getElementById("canvas-wrapper");
+        canvas.width  = canvas_wrapper.clientWidth;
+        canvas.height = canvas_wrapper.clientHeight;
+
+        let ctx = canvas.getContext("2d");
+        let triangles = [];
+
+        class Triangle {
+            constructor(pt1, pt2, pt3, motion, opacity) {
+                this.pt1 = pt1;
+                this.pt2 = pt2;
+                this.pt3 = pt3;
+                this.motion = motion;
+                this.opacity = opacity;
+            }
+
+            move() {
+                this.pt1.y -= this.motion;
+                this.pt2.y -= this.motion;
+                this.pt3.y -= this.motion;
+                this.motion++;
+                this.opacity -= 0.03;
+            }
+        }
+
+        let easing_value = 0;
+
+        function triangleAnimationFrame() {
+            //Triangles
+            if (music_playing) triangles.push(createTriangle());
+            for (let i = triangles.length - 1; i >= 0; i--) {
+                let tri = triangles[i];
+                tri.move();
+                if (tri.opacity <= 0) {
+                    triangles.splice(i, 1);
+                }
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let tri of triangles) {
+                ctx.beginPath();
+                const hue = randInt(220, 280);          // 蓝-紫随机
+                ctx.strokeStyle = `hsla(${hue}, 100%, 60%, ${tri.opacity})`;
+                ctx.lineWidth = 4;
+                ctx.moveTo(tri.pt1.x, tri.pt1.y);
+                ctx.lineTo(tri.pt2.x, tri.pt2.y);
+                ctx.lineTo(tri.pt3.x, tri.pt3.y);
+                ctx.lineTo(tri.pt1.x, tri.pt1.y);
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            // Waves
+            if (music_playing) {
+                easing_value = Math.min(1, easing_value + 0.05);
+            } else {
+                easing_value = Math.max(0, easing_value - 0.02);
+            }
+            const divide_quantity = 100;
+            const column_width = canvas.width / divide_quantity * 0.75;
+            const time = performance.now();
+
+            for (let i = 0; i < divide_quantity; i++) {
+                const x = canvas.width / divide_quantity * i;
+                let curve_value = curve_formula((time/1000 + i)/3);
+                ctx.fillStyle = `hsla(${220 + 50 * i / divide_quantity}, 100%, 60%, 0.2)`;
+                let half_height = canvas.height / 4 * curve_value * Math.sin(easing_value / 2 * Math.PI);
+                ctx.fillRect(x, canvas.height / 2 - half_height, column_width, 2 * half_height);
+
+                ctx.fillStyle = `hsla(${235 + 50 * i / divide_quantity}, 100%, 60%, 0.4)`;
+                curve_value = curve_formula((time/1000 + i)/3 + 1);
+                half_height = canvas.height / 4 * curve_value * Math.sin(easing_value / 2 * Math.PI) * 0.8;
+                ctx.fillRect(x, canvas.height / 2 - half_height, column_width, 2 * half_height);
+
+                ctx.fillStyle = `hsla(${250 + 50 * i / divide_quantity}, 100%, 60%, 0.6)`;
+                curve_value = curve_formula((time/1000 + i)/3 + 2);
+                half_height = canvas.height / 4 * curve_value * Math.sin(easing_value / 2 * Math.PI) * 0.6;
+                ctx.fillRect(x, canvas.height / 2 - half_height, column_width, 2 * half_height);
+            }
+            requestAnimationFrame(triangleAnimationFrame);
+        }
+        requestAnimationFrame(triangleAnimationFrame);
+
+        function createTriangle() {
+            const ptset = equilateralTriangleOnCircle(randInt(0, canvas.width), canvas.height, randInt(5, 15), randInt(0, 120) * Math.PI / 180);
+            return new Triangle(ptset[0], ptset[1], ptset[2], 0, 1);
+        }
+
+        function equilateralTriangleOnCircle(x0, y0, r, startAngle) {
+            const theta1 = startAngle;
+            const theta2 = startAngle + 2 * Math.PI / 3;
+            const theta3 = startAngle + 4 * Math.PI / 3;
+
+            return [
+                { x: x0 + r * Math.cos(theta1), y: y0 + r * Math.sin(theta1) },
+                { x: x0 + r * Math.cos(theta2), y: y0 + r * Math.sin(theta2) },
+                { x: x0 + r * Math.cos(theta3), y: y0 + r * Math.sin(theta3) }
+            ];
+        }
+
+        const randInt = (min, max) =>
+            Math.floor(Math.random() * (max - min + 1)) + min;
+
+
+        function curve_formula(x) {
+            return (0.2*Math.sin(x) + 0.5*(Math.sin(0.5*x)**2) + 0.3*Math.sin(2*x+1) + 0.4*Math.sin(3*x+1) + 1) / 2;
+        }
+    </script>
+
+</body>
+</html>

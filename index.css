@@ -1,0 +1,166 @@
+html{
+    user-select: none;
+}
+
+.bg {
+    background: rgba(0, 0, 0, 0.45);
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: blur(18px) brightness(1.2);
+    transform: scale(1.05);
+}
+
+.bg-mask {
+    background: rgba(0, 0, 0, 0.25);
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.canvas-wrapper {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+#rhythm-wave {
+    width: 100%;
+    height: 100%;
+    filter: brightness(1.5), drop-shadow(4px 4px 6px rgba(0,123,255,.5));
+}
+
+.panel-all {
+    --pannel-border: 10px;
+
+    position: fixed;
+    inset: 0;
+    gap: 2%;
+    margin: auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100vw - 50px);
+    height: calc(100vh - 50px);
+    z-index: 1;
+}
+
+.illu {
+    flex:0 0 25%;       /* 不放大、不缩小、基准 33.333% */
+    width:100%;             /* 防止 img 本身宽度撑开 */
+    height:100%;            /* 让图片保持原始比例 */
+    background-image: url('./image/bg.png'); /* 替换为你的图片路径 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    border-radius: var(--pannel-border);
+    box-shadow: 10px 10px 3px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.5);
+}
+
+.info-panel {
+    flex:0 0 73%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: var(--pannel-border);
+    box-shadow: 10px 10px 3px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.club-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3vw;
+    font-weight: 100;
+    letter-spacing: 3vw;
+    color: #fff;
+}
+
+.song-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+    font-size: 5vw;
+    font-weight: 100;
+    color: #fff;
+}
+
+.artist-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5vw;
+    font-weight: 200;
+    color: #fff;
+}
+
+.artist-name-link {
+    font-size: 1.5vw;
+    font-weight: 200;
+    color: #fff;
+}
+
+.fade-effect {
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-25%);
+    animation: fadeIn 1.2s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        transform: translateY(-25%);  /* 起点：上方 */
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);     /* 终点：原位置 */
+        opacity: 1;
+    }
+}
+
+.play-button-wrapper {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.play-button {
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 15px;
+    color: white;
+    padding: 1em 7.5em;
+    font-size: 1vw;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    letter-spacing: 0.5em;
+}
+
+.play-button:hover {
+    background-color: white;
+    color: #000;
+    transition: background-color 0.3s ease, color 0.3s ease, letter-spacing 0.3s ease;
+    letter-spacing: 0.8em;
+}
+
+.play-button:active {
+    transform: scale(0.97);
+}

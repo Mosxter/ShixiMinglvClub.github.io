@@ -11,7 +11,7 @@ html{
     height: 100%;
     object-fit: cover;
     z-index: -1;
-    filter: blur(18px) brightness(0.6);
+    filter: blur(18px) brightness(0.7);
     transform: scale(1.05);
 }
 
@@ -33,8 +33,6 @@ html{
 .panel-all {
     --pannel-border: 10px;
 
-    width: 90%;
-    height: 90%;
     position: relative;
     inset: 0;
     gap: 2%;

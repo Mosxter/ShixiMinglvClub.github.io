@@ -42,7 +42,7 @@ html{
     justify-content: center;
     align-items: center;
     width: 95vw;
-    aspect-ratio: 2 / 1;
+    height: 47vw;
     z-index: 1;
 }
 

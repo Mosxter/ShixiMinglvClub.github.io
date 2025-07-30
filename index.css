@@ -43,6 +43,8 @@ html{
 .panel-all {
     --pannel-border: 10px;
 
+    width: 90%;
+    height: 90%;
     position: relative;
     inset: 0;
     gap: 2%;

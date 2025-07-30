@@ -211,7 +211,6 @@ html{
 .avatar {
     width: 100%;
     height: auto;
-    overflow: hidden;
     border-top-left-radius: var(--person-card-border-radius);
 }
 

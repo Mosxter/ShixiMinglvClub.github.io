@@ -214,6 +214,13 @@ html{
     border-top-left-radius: var(--person-card-border-radius);
 }
 
+.avatar img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover; /* 保持图片比例 */
+}
+
 .avatar-name {
     display: flex;
     justify-content: left;

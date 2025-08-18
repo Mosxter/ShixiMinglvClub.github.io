@@ -2,7 +2,7 @@ import { Start } from './scenes/Start.js';
 
 const config = {
     type: Phaser.AUTO,
-    title: 'Overlord Rising',
+    title: 'TapRhythm',
     description: '',
     parent: 'game-container',
     width: 1920,
